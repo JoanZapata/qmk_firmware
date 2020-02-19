@@ -149,6 +149,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 
+// Since space and shift are the same key with a Mod Tap, tapping " A"
+// is inconvenient since the second press is considered like a space.
+bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case MT(MOD_LSFT, KC_SPC):
+      return true;
+    default:
+      return false;
+  }
+}
+
 void matrix_init_user(void) {
 }
 
