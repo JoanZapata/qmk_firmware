@@ -40,7 +40,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |   Z  |   X  |   C  |   V  |   B  |           |   K  |   M  |   ,  |   .  |   /  |
  * `-------------+------+------+------|           |------+------+------+------+------'
  *               | CMD  | LOWER|Ctrl/Enter|       |Spc/Sft|RAISE|Alt/BkSp|
- *               `--------------------'           `--------------------'
+ *               `----------≜---------'           `--------------------'
+ *                  `--TAB--'
  */
 [_QWERTY] = LAYOUT( \
   KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,                 KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN,    \
@@ -108,8 +109,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 )
 };
 
+// Holds the state of the CMD key.
+bool is_CMD_pressed = false;
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
+    case KC_LGUI: // (CMD)
+      // Keep the state of the CMD key to modify the LOWER key accordingly
+      is_CMD_pressed = record->event.pressed;
+      return true;
+      break;
     case QWERTY:
       if (record->event.pressed) {
         // persistant_default_layer_set(1UL<<_QWERTY);
@@ -118,7 +127,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return false;
       break;
     case LOWER:
-      if (record->event.pressed) {
+      // Custom code that interprets the LOWER key as a TAB key when
+      // CMD is pressed, so that we can easily do CMD+TAB single-handedly.
+      if (is_CMD_pressed) {
+        if (record->event.pressed) {
+          tap_code(KC_TAB);
+        }
+      } else if (record->event.pressed) {
         layer_on(_LOWER);
         update_tri_layer(_LOWER, _RAISE, _ADJUST);
       } else {
