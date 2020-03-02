@@ -39,7 +39,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------|           |------+------+------+------+------|
  * |   Z  |   X  |   C  |   V  |   B  |           |   K  |   M  |   ,  |   .  |   /  |
  * `-------------+------+------+------|           |------+------+------+------+------'
- *               | CMD  | LOWER|Ctrl/Enter|       |Spc/Sft|RAISE|Alt/BkSp|
+ *               | Ctrl | LOWER|CMD/Enter|       |Spc/Sft|RAISE|Alt/BkSp|
  *               `----------≜---------'           `--------------------'
  *                  `--TAB--'
  */
@@ -47,7 +47,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,                 KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN,    \
   KC_A,    KC_R,    KC_S,    KC_T,    KC_D,                 KC_H,    KC_N,    KC_E,    KC_I,    KC_O, \
   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                 KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, \
-                    KC_LGUI, LOWER, MT(MOD_LCTL, KC_ENTER),   MT(MOD_LSFT, KC_SPC), RAISE, MT(MOD_LALT, KC_BSPC)  \
+                    KC_LCTL, LOWER, MT(MOD_LGUI, KC_ENTER), MT(MOD_LSFT, KC_SPC), RAISE, MT(MOD_LALT, KC_BSPC)  \
 ),
 
 /* Raise
@@ -114,7 +114,7 @@ bool is_CMD_pressed = false;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case KC_LGUI: // (CMD)
+    case MT(MOD_LGUI, KC_ENTER): // (CMD)
       // Keep the state of the CMD key to modify the LOWER key accordingly
       is_CMD_pressed = record->event.pressed;
       return true;
