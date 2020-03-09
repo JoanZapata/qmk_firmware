@@ -28,6 +28,100 @@ enum custom_keycodes {
   ADJUST,
 };
 
+// Tap Dance Declarations
+enum {
+  TD_E = 0,
+  TD_A,
+  TD_U,
+  TD_I,
+};
+
+void dance_e(qk_tap_dance_state_t *state, void *user_data) {
+  switch (state->count) {
+     case 1: // e
+        tap_code(KC_E);
+        break;
+     case 2: // é
+        register_code(KC_LALT);
+        tap_code(KC_E);
+        unregister_code(KC_LALT);
+        tap_code(KC_E);
+        break;
+     case 3: // è
+        register_code(KC_LALT);
+        tap_code(KC_GRV);
+        unregister_code(KC_LALT);
+        tap_code(KC_E);
+        break;
+     case 4: // ê
+        register_code(KC_LALT);
+        tap_code(KC_I);
+        unregister_code(KC_LALT);
+        tap_code(KC_E);
+        break;
+     case 5: // ë
+        register_code(KC_LALT);
+        tap_code(KC_U);
+        unregister_code(KC_LALT);
+        tap_code(KC_E);
+        break;
+  }
+  reset_tap_dance (state);
+}
+
+void dance_a(qk_tap_dance_state_t *state, void *user_data) {
+  switch (state->count) {
+     case 1: // a
+        tap_code(KC_A);
+        break;
+     case 2: // à
+        register_code(KC_LALT);
+        tap_code(KC_GRV);
+        unregister_code(KC_LALT);
+        tap_code(KC_A);
+        break;
+  }
+  reset_tap_dance (state);
+}
+
+void dance_u(qk_tap_dance_state_t *state, void *user_data) {
+  switch (state->count) {
+     case 1: // u
+        tap_code(KC_U);
+        break;
+     case 2: // ù
+        register_code(KC_LALT);
+        tap_code(KC_GRV);
+        unregister_code(KC_LALT);
+        tap_code(KC_U);
+        break;
+  }
+  reset_tap_dance (state);
+}
+
+void dance_i(qk_tap_dance_state_t *state, void *user_data) {
+  switch (state->count) {
+     case 1: // i
+        tap_code(KC_I);
+        break;
+     case 2: // ï
+        register_code(KC_LALT);
+        tap_code(KC_U);
+        unregister_code(KC_LALT);
+        tap_code(KC_I);
+        break;
+  }
+  reset_tap_dance (state);
+}
+
+//Tap Dance Definitions
+qk_tap_dance_action_t tap_dance_actions[] = {
+  [TD_E]  =  ACTION_TAP_DANCE_FN (dance_e),
+  [TD_A]  =  ACTION_TAP_DANCE_FN (dance_a),
+  [TD_U]  =  ACTION_TAP_DANCE_FN (dance_u),
+  [TD_I]  =  ACTION_TAP_DANCE_FN (dance_i),
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Qwerty
@@ -44,9 +138,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                  `--TAB--'
  */
 [_QWERTY] = LAYOUT( \
-  KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,                 KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN,    \
-  KC_A,    KC_R,    KC_S,    KC_T,    KC_D,                 KC_H,    KC_N,    KC_E,    KC_I,    KC_O, \
-  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                 KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, \
+  KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,                 KC_J,    KC_L,    TD(TD_U),    KC_Y,    KC_SCLN, \
+  TD(TD_A),KC_R,    KC_S,    KC_T,    KC_D,                 KC_H,    KC_N,    TD(TD_E),    TD(TD_I),   KC_O, \
+  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                 KC_K,    KC_M,    KC_COMM,   KC_DOT,    KC_SLSH, \
                     KC_LCTL, LOWER, MT(MOD_LGUI, KC_ENTER), MT(MOD_LSFT, KC_SPC), RAISE, MT(MOD_LALT, KC_BSPC)  \
 ),
 
