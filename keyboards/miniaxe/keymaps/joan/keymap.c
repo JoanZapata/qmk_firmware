@@ -34,6 +34,8 @@ enum {
   TD_A,
   TD_U,
   TD_I,
+  TD_Q,
+  TD_G,
 };
 
 void dance_e(qk_tap_dance_state_t *state, void *user_data) {
@@ -114,12 +116,40 @@ void dance_i(qk_tap_dance_state_t *state, void *user_data) {
   reset_tap_dance (state);
 }
 
+void dance_q(qk_tap_dance_state_t *state, void *user_data) {
+  switch (state->count) {
+     case 1: // q
+        tap_code(KC_I);
+        break;
+     case 2: // ESC
+        tap_code(KC_ESC);
+        break;
+  }
+  reset_tap_dance (state);
+}
+
+void dance_g(qk_tap_dance_state_t *state, void *user_data) {
+  switch (state->count) {
+     case 1: // g
+        tap_code(KC_G);
+        break;
+     case 3: // Shift + F6 (IntelliJ Rename)
+        register_code(KC_LSFT);
+        tap_code(KC_F6);
+        unregister_code(KC_LSFT);
+        break;
+  }
+  reset_tap_dance (state);
+}
+
 //Tap Dance Definitions
 qk_tap_dance_action_t tap_dance_actions[] = {
   [TD_E]  =  ACTION_TAP_DANCE_FN (dance_e),
   [TD_A]  =  ACTION_TAP_DANCE_FN (dance_a),
   [TD_U]  =  ACTION_TAP_DANCE_FN (dance_u),
   [TD_I]  =  ACTION_TAP_DANCE_FN (dance_i),
+  [TD_Q]  =  ACTION_TAP_DANCE_FN (dance_q),
+  [TD_G]  =  ACTION_TAP_DANCE_FN (dance_g),
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -138,7 +168,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                  `--TAB--'
  */
 [_QWERTY] = LAYOUT( \
-  KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,                 KC_J,    KC_L,    TD(TD_U),    KC_Y,    KC_SCLN, \
+  TD(TD_Q),KC_W,    KC_F,    KC_P,TD(TD_G),                 KC_J,    KC_L,    TD(TD_U),    KC_Y,    KC_SCLN, \
   TD(TD_A),KC_R,    KC_S,    KC_T,    KC_D,                 KC_H,    KC_N,    TD(TD_E),    TD(TD_I),   KC_O, \
   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                 KC_K,    KC_M,    KC_COMM,   KC_DOT,    KC_SLSH, \
                     KC_LCTL, LOWER, MT(MOD_LGUI, KC_ENTER), MT(MOD_LSFT, KC_SPC), RAISE, MT(MOD_LALT, KC_BSPC)  \
